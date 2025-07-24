@@ -20,7 +20,7 @@ function Dashboard() {
       <h1 className="text-9xl">Hello!</h1>
       <p className="text-2xl">Welcome to the Dashboard</p>
 
-      <table className="w-full border mt-7 text-left">
+      <table className="w-full border-gray-300 border-t mt-7 text-center">
         <thead>
           <tr>
             <th className="p-2">Id</th>
@@ -34,7 +34,7 @@ function Dashboard() {
         </thead>
         <tbody>
           {filtered.map((user) => (
-            <tr key={user._id} className="border-t">
+            <tr key={user._id} className="border-t border-b border-gray-300">
               <td className="p-2">{user._id}</td>
               <td className="p-2">{user.name}</td>
               <td className="p-2">{user.age}</td>
@@ -48,7 +48,7 @@ function Dashboard() {
       </table>
       <div className="flex justify-center">
         <button onClick={() => navigate("/data")}
-          className="mt-6 bg-red-800 text-white text-2xl py-2 px-3 min-w-fit rounded">
+          className="mt-6 bg-red-900 text-white text-2xl py-2 px-3 min-w-fit rounded">
           View All Data
         </button>
       </div>
