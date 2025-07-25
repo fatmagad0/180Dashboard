@@ -1,27 +1,43 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import { MdDelete  } from "react-icons/md";
+import { IoPerson  } from "react-icons/io5";
 
 function DataPage() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get("https://fake-form.onrender.com/api/students")
-      .then((res) => setData(res.data.data))
-      .catch((err) => console.error("Error fetching data:", err));
-  }, []);
+      .then((res) => { setData(res.data.data); setLoading(false);})
+      .catch((err) => {console.error("Error fetching data:", err);
+        setLoading(false);});
+      }, []);
+
   const handleDelete = (id) => {
     axios
       .delete(`https://fake-form.onrender.com/api/students/${id}`)
       .then(() => {
         setData(data.filter((user) => user._id !== id));
       })
-      .catch((err) => console.error("Error deleting data:", err));
+      .catch((err) => { console.error("Error deleting data:", err); setLoading(false);});
   };
+  
   const handleEdit = (id) => {
     navigate(`/edit/${id}`);
   };
+ 
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4 px-7">
@@ -50,19 +66,23 @@ function DataPage() {
               <td className="p-2">{user.phone}</td>
               <td className="p-2">{user.level}</td>
               <td className="p-2">{user.university}</td>
-              <td className="p-2 space-x-2">
-                <button
-                  className="bg-green-500 px-3 py-1 rounded text-white"
-                  onClick={() => handleEdit(user._id)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-600 px-3 py-1 rounded text-white"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  Delete
-                </button>
+               <td className="p-2">
+                <div className="flex gap-2 justify-center">
+                  <button
+                    className="bg-green-500 px-3 py-1 rounded text-white flex items-center gap-1"
+                    onClick={() => handleEdit(user._id)}
+                  >
+                    <IoPerson />
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-600 px-3 py-1 rounded text-white flex items-center gap-1"
+                    onClick={() => handleDelete(user._id)}
+                  >
+                    <MdDelete />
+                    Delete
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

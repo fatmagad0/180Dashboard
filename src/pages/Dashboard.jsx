@@ -1,17 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 function Dashboard() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("https://fake-form.onrender.com/api/students")
-      .then((res) => setData(res.data.data))
-      .catch((err) => console.error("Error fetching data:", err));
+  .get("https://fake-form.onrender.com/api/students")
+  .then((res) => {
+    setData(res.data.data);
+    setLoading(false);
+  })
+  .catch((err) => {
+    console.error("Error fetching data:", err);
+    setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
 
   const filtered = data.slice(0,5);
 
